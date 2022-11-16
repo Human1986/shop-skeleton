@@ -1,85 +1,95 @@
 # Shop (cashboxes)
 
-The purpose of this exercise is to train you to work with queues.  
-The estimated workload is *120 min*.
+The purpose of this exercise is to train you to work with queues.
+
+
+Duration: _1.5 hours_
+
 
 ## Description 
 
-A shop has **N** cashboxes. Every cashbox is numbered from 0 up to N-1 and can be in one of the following states, decsribed by the `CashBox.State` enum:  
-* ENABLED - enabled cashbox can have a not empty queue of buyers, it can serve buyers, new buyers can be added to the end of its queue;  
-* IS_CLOSING - cashbox is in a process of a closing, it serves existed buyers, but no new buyers can be added to its queue;  
-* DISABLED - this cashbox has an empty queue and cannot serve any buyer.  
+A shop has **N** cashboxes. Every cashbox is numbered from 0 to N - 1 and can be in one of the following states, which are described by the `CashBox.State` enum:  
+* ENABLED - An enabled cashbox can have a nonempty queue of buyers and serve buyers. New buyers can be added to the end of its queue.  
+* IS_CLOSING - A cashbox is in the process of closing. It serves existing buyers, but no new buyers can be added to the end of the queue.  
+* DISABLED - A cashbox has an empty queue and cannot serve any buyer.  
 
 
 When the `tact` method of class `Shop` is invoked:  
-* every non empty queue is decreased by 1 buyer (this one is removed from the head of a queue);  
-* all queues are balanced by a count of buyers if necessary;  
-* cashbox by state `IS_CLOSING` changes its status to `DISABLED` if a last buyer just has been served (i.e. size of its queue will become equal to 0).  
+* Every nonempty queue is decreased by one buyer (which is removed from the head of a queue).  
+* All queues are balanced by the count of buyers if necessary.  
+* A cashbox with a state of `IS_CLOSING` changes its status to `DISABLED` if the last buyer was just served (i.e., the size of its queue is changed to 0). 
 
-If a cashbox changes its status from `DISABLED` to `ENABLED`, then buyers from the tail of other queues go to the tail of queue of this cashbox.  
+If a cashbox changes its status from  `DISABLED` to `ENABLED`, the buyers from the ends of the queues of the other cashboxes go to the end of this cashbox's queue.  
 
-Length of queues cannot be differ in more than 1. But a queue with a state of IS_CLOSING can have less buyers than other queues.  
+The length of queues cannot differ by more than 1, but a queue with a state of `IS_CLOSING` can have fewer buyers than other queues.  
 
-> Cashbox with a lower number must not have less buyers than a cashbox with a bigger number, if both are in `ENABLED` state.  
+> A cashbox with a lower number must not have fewer buyers in its queue than a cashbox with a larger number if both are in the `ENABLED` state.  
 
-Please, proceed to the class `CashBox` and implement the following methods:  
+Now, please proceed to the `CashBox` class and implement the following methods:  
 
 * `public Deque<buyer> getQueue()`  
-Returns a copy of queue.  
+   Returns a copy of the queue  
 
-* `public buyer serveBuyer()`  
-Serves a buyer if a queue is not empty, changes a state from IS_CLOSING to disable if necessary.  
+* `public Buyer serveBuyer()`  
+   Serves a buyer if a queue is nonempty and changes state from `IS_CLOSING` to `DISABLE` if necessary  
 
 * `public boolean inState(State state)`  
-Checks if this cashbox has the specified state.  
+   Checks to see if a cashbox is in a specified state.  
 
-* `public void add(buyer buyer)`  
-Adds a bayer to the end of this cashbox queue.  
+* `public boolean notInState(State state)` 
+   Checks to see if a cashbox is not in a specified state  
+
+* `public void addLast(Buyer buyer)`    
+   Adds a buyer to the end of the cashbox queue  
 
 * `public Buyer removeLast()`  
-Retrieves and removes the last buyer of this cashbox queue.
+   Removes a buyer from the end of the cashbox queue and returns them
 
 * `public String toString()`  
-Generates a textual reperentation of this cashbox (see an example below).
+   Generates a textual representation of the cashbox queue (see the example below)
 
-* `setter/getter`  
-Sets/returns a state of this cashbox.  
+* `setter/getter `
+   Sets/returns the state of the cashbox
+  
 
-Please, proceed to the class `Shop` and implement the following methods:  
+Now, please proceed to the `Shop` class and implement the following methods:  
+
+* `public void print()`  
+Prints all cashboxes in increasing order by number (see the example below)
 
 * `public void addBuyer(Buyer buyer)`  
-Adds a buyer to the end of the shortest queue; if there are more than one shortest queue, adds to the end of the queue which belongs to cashbox with lower number.  
+   Adds a buyer to the end of the cashbox with the smallest queue
 
-* `public CBox getCBox(int cboxNumber)`  
-Returns a cashbox by its number; throws `IllegalArgumentException` if a number is out of range.  
+* `public CashBox getCashBox(int cboxNumber)`  
+   Returns a cashbox by its number
 
 * `public void setCashBoxState(int cboxNumber, State state)`  
-Sets a new state for cashbox with the specified number; throws `IllegalArgumentException` if a number is out of range.   
+   Sets a new state for a cashbox with a specified number
 
 * `public void tact()`  
-Does one tact (see description above).  
+Does one tact (see the description above)
+ 
 
-> You can add your own methods if you want. Don't change any content of the `Buyer` and `Demo` classes.  
+> You can add your own methods if you want. Just don't change any content in the `Buyer` class.
 
-## Description of how to balance queues of cashboxes
+## Details:
 
-When at least one cashbox changes its state from `DISABLED` to `ENABLED` all queues must be balanced by count of buyers. Please use the following algorithm to redistibute buyers by cashbox queues.
-* Calculate minimum and maximum values of size of queues after redistribution. 
-* Create a new queue `defector-buyers` of buyers who leave there queues.  
+A description of the `balance()` method of the `Shop` class, which redistributes buyers in cashbox queues when some of their statuses change from `DISABLED` to `ENABLED`:  
+* Calculate the minimum and maximum values of the size of queues after redistribution  
+* Create a new queue of defector-buyers who leave their queues  
+* Iterate over the queues of all cashboxes in ascending order by number, and do the following for each:  
+   * Calculate how many buyers must leave the queue—for example, _k_ buyers (_k_ ≥ 0)  
+   * Move k buyers from the end of this queue to the end of the defector-buyer queue  
+* Iterate over the queues of all the cashboxes in ascending order by number, and do the following for each:
+   * Calculate how many buyers must be added to the queue—for example, _k_ buyers (_k_ ≥ 0)  
+   * Move _k_ buyers from the head of the defector-buyer queue to the end of this queue (remember that a queue with a state of `IS_CLOSING` cannot be extended)  
 
-* Iterate over all queues in ascending order by its number and do the following:
-    * calculate how much buyer have to leave this queue, for example it is **k** buyers (**k** >= 0);
-    * move **k** buyers from the end of this queue to the end of the `defector-buyers` queue.
 
-* Iterate over all queues in ascending order by number and do the following:
-    * calculate how much buyer have to be added to this queue, for example it is **k** buyers (**k** >= 0);
-    * move **k** buyers from the head of `defector-buyers` queue to the end of this queue (remember that queue with the state IS_CLOSING cannot be extended).
-
-> Restrictions:
-You may not use lambda and Streams during the implementation of this task.
+## Restrictions:
+You may not use lambdas or streams while doing this task.
 
 ### Example
-If the initial state is as the following
+Assume that a letter indicates a buyer, a '+' sign is an available cashbox, and a '-' sign is an unavailable cashbox. Suppose the initial state of the cashboxes is the following:
 ```
 #0[+] ABCDE
 #1[+] 
@@ -87,9 +97,7 @@ If the initial state is as the following
 #3[+] 
 #4[-] 
 ```
-then method `tact` serves two buyers A and F and balances queues.  
-When A and F are removed, total number of buyers will be 7.
-There are 4 not `DISABLED` queues, so after the redistribution we have minimum number of buyers in queue is 1, and maximum number of buyers in queue is 2.
+The method `tact()` serves two buyers—A and F—and redistributes the queues. When A and F are removed, the total number of buyers will be 7. The cashbox at number 4 is in the `DISABLED` state, so the minimum number of buyers in the queue is 1, and the maximum is 2.
 ```
 #0[+] BC  (DE ==> defector buyers)
 #1[+] 
@@ -100,7 +108,7 @@ There are 4 not `DISABLED` queues, so after the redistribution we have minimum n
 
 `defector-buyers` = [E, D, I]
 
-Buyers from `defector-buyers` are redistributed among all (enabled) queues:
+After the redistribution of defector-buyers, the queues might look like this:
 ```
 #0[+] BC
 #1[+] ED
@@ -108,9 +116,11 @@ Buyers from `defector-buyers` are redistributed among all (enabled) queues:
 #3[+] I
 #4[-] 
 ```
+#### Note.  
+    If a cashbox is in the IS_CLOSING state, its queue cannot be increased; it can only be decreased.
 
 ## Output example
-The `main` method of class `Demo` have to produce the following output:
+The `main` method of the `Shop` class must produce the following output:
 ```
 Initial state
 #0[-] 
