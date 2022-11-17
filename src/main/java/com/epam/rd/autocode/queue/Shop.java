@@ -42,5 +42,9 @@ public class Shop {
 	public CashBox getCashBox(int cashBoxNumber) {
 		return null;
 	}
+	
+	public void print() {
+
+	}
 
 }

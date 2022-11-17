@@ -3,7 +3,7 @@ package com.epam.rd.autocode.queue;
 /**
  * @author D. Kolesnikov
  */
-public final class Byer {
+public final class Buyer {
 	
 	private static char nextName; 
 	
@@ -15,13 +15,13 @@ public final class Byer {
 		nextName = 'A'; 
 	}
 
-	public static Byer nextByer() {
-		return new Byer(nextName++);
+	public static Buyer nextBuyer() {
+		return new Buyer(nextName++);
 	}
 	
 	private final char name;
 	
-	private Byer(char name) {
+	private Buyer(char name) {
 		this.name = name;
 	}
 	

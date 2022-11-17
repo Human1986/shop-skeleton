@@ -4,11 +4,11 @@ import java.util.Deque;
 import java.util.LinkedList;
 
 
-public class CBox {
+public class CashBox {
 	
 	private int number;
 	
-	private Deque<Byer> byers;
+	private Deque<Buyer> byers;
 	
 	private State state;
 	
@@ -16,14 +16,14 @@ public class CBox {
 		ENABLED, DISABLED, IS_CLOSING
 	}
 	
-	public CBox(int number) {
+	public CashBox(int number) {
 	}
 
-	public Deque<Byer> getQueue() {
+	public Deque<Buyer> getQueue() {
 		return null;
 	}
 
-	public Byer serveByer() {
+	public Buyer serveByer() {
 		return null;
 	}
 
@@ -42,10 +42,10 @@ public class CBox {
 		return null;
 	}
 
-	public void addLast(Byer byer) {
+	public void addLast(Buyer byer) {
 	}
 
-	public Byer removeLast() {
+	public Buyer removeLast() {
 		return null;
 	}
 	

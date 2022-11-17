@@ -3,6 +3,9 @@ package com.epam.rd.autocode.queue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.stream.Stream;
@@ -10,7 +13,6 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.epam.rd.autocode.queue.Shop;
 import com.epam.rd.autocode.queue.CashBox.State;
 
 import spoon.Launcher;
@@ -22,6 +24,8 @@ import spoon.reflect.visitor.filter.TypeFilter;
  * @author D. Kolesnikov
  */
 public class ShopTest {
+	
+	private static final PrintStream STD_OUT = System.out;
 
 	private Shop shop;
 	
@@ -179,6 +183,28 @@ public class ShopTest {
 		String expected = "+CDENP-|HI+MLKOQ-";
 		assertEquals(expected, actual);
 	}
+
+	@Test
+	void test6() throws IOException {
+		shop.setCashBoxState(0, State.ENABLED);
+
+		shop.addBuyer(Buyer.nextBuyer());
+		shop.addBuyer(Buyer.nextBuyer());
+		shop.addBuyer(Buyer.nextBuyer());
+		shop.addBuyer(Buyer.nextBuyer());
+
+		shop.setCashBoxState(1, State.ENABLED);
+		shop.addBuyer(Buyer.nextBuyer());
+
+		shop.setCashBoxState(0, State.IS_CLOSING);
+		shop.addBuyer(Buyer.nextBuyer());
+
+		shop.tact();
+		
+		String actual = getState(shop);
+		String expected = "|BC+FD---";
+		assertEquals(expected, actual);
+	}
 	
 	@Test
 	void complianceTestLambdaExpressionsAreRestrictedForUsing() {
@@ -228,6 +254,48 @@ public class ShopTest {
 
 		shop.addBuyer(Buyer.nextBuyer());
 		assertEquals(shop.getCashBox(0).getQueue().getLast().toString(), "D");
+	}
+	
+	@Test
+	void printShouldWorkProperly() throws IOException {
+		shop = new Shop(3);
+		String actual = null;
+		try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				PrintStream ps = new PrintStream(baos)) {
+			System.setOut(ps);
+
+			shop.setCashBoxState(0, State.ENABLED);
+			shop.setCashBoxState(1, State.ENABLED);
+			shop.setCashBoxState(2, State.ENABLED);
+			shop.addBuyer(Buyer.nextBuyer());
+			shop.addBuyer(Buyer.nextBuyer());
+			shop.addBuyer(Buyer.nextBuyer());
+			shop.addBuyer(Buyer.nextBuyer());
+			shop.addBuyer(Buyer.nextBuyer());
+			shop.addBuyer(Buyer.nextBuyer());
+			shop.addBuyer(Buyer.nextBuyer());
+			shop.addBuyer(Buyer.nextBuyer());
+			shop.addBuyer(Buyer.nextBuyer());
+
+			shop.setCashBoxState(0, State.IS_CLOSING);
+			shop.tact();
+			shop.addBuyer(Buyer.nextBuyer());
+
+			shop.setCashBoxState(1, State.IS_CLOSING);
+			shop.addBuyer(Buyer.nextBuyer());
+			shop.addBuyer(Buyer.nextBuyer());
+			shop.tact();
+			shop.tact();
+			
+			shop.print();
+			actual = baos.toString();
+		} finally {
+			System.setOut(STD_OUT);
+		}
+		
+		actual = actual.replaceAll("\r", "").trim();
+		String expected = "#0[-]~#1[|]J~#2[+]KL".replace('~', '\n');
+		assertEquals(expected, actual);
 	}
 	
 	private static String getState(Shop shop) {
