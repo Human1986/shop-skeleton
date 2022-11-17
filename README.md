@@ -3,7 +3,7 @@
 The purpose of this exercise is to train you to work with queues.
 
 
-Duration - **1.5 hours**
+Duration: _1.5 hours_
 
 
 ## Description 
@@ -55,7 +55,7 @@ Now, please proceed to the `CashBox` class and implement the following methods:
 Now, please proceed to the `Shop` class and implement the following methods:  
 
 * `public void print()`  
-Prints all cashboxes in increasing order by number (see the example below)
+   Prints all cashboxes in increasing order by number (see the example below)
 
 * `public void addBuyer(Buyer buyer)`  
    Adds a buyer to the end of the cashbox with the smallest queue
@@ -67,12 +67,12 @@ Prints all cashboxes in increasing order by number (see the example below)
    Sets a new state for a cashbox with a specified number
 
 * `public void tact()`  
-Does one tact (see the description above)
+   Does one tact (see the description above)
  
 
 > You can add your own methods if you want. Just don't change any content in the `Buyer` class.
 
-### Details:
+## Details:
 
 A description of the `balance()` method of the `Shop` class, which redistributes buyers in cashbox queues when some of their statuses change from `DISABLED` to `ENABLED`:  
 * Calculate the minimum and maximum values of the size of queues after redistribution  
@@ -88,7 +88,7 @@ A description of the `balance()` method of the `Shop` class, which redistributes
 ## Restrictions:
 You may not use lambdas or streams while doing this task.
 
-## Example
+### Example
 Assume that a letter indicates a buyer, a '+' sign is an available cashbox, and a '-' sign is an unavailable cashbox. Suppose the initial state of the cashboxes is the following:
 ```
 #0[+] ABCDE
@@ -116,7 +116,7 @@ After the redistribution of defector-buyers, the queues might look like this:
 #3[+] I
 #4[-] 
 ```
-### Note.  
+#### Note.  
     If a cashbox is in the IS_CLOSING state, its queue cannot be increased; it can only be decreased.
 
 ## Output example
