@@ -3,7 +3,7 @@
 The purpose of this exercise is to train you to work with queues.
 
 
-Duration: _1.5 hours_
+Duration: **1.5 hours**
 
 
 ## Description 
@@ -72,7 +72,7 @@ Now, please proceed to the `Shop` class and implement the following methods:
 
 > You can add your own methods if you want. Just don't change any content in the `Buyer` class.
 
-## Details:
+### Details:
 
 A description of the `balance()` method of the `Shop` class, which redistributes buyers in cashbox queues when some of their statuses change from `DISABLED` to `ENABLED`:  
 * Calculate the minimum and maximum values of the size of queues after redistribution  
@@ -88,7 +88,7 @@ A description of the `balance()` method of the `Shop` class, which redistributes
 ## Restrictions:
 You may not use lambdas or streams while doing this task.
 
-### Example
+## Example
 Assume that a letter indicates a buyer, a '+' sign is an available cashbox, and a '-' sign is an unavailable cashbox. Suppose the initial state of the cashboxes is the following:
 ```
 #0[+] ABCDE
