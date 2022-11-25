@@ -9,9 +9,9 @@ Duration: **1.5 hours**
 ## Description 
 
 A shop has **N** cashboxes. Every cashbox is numbered from 0 to N - 1 and can be in one of the following states, which are described by the `CashBox.State` enum:  
-* ENABLED - An enabled cashbox can have a nonempty queue of buyers and serve buyers. New buyers can be added to the end of its queue.  
-* IS_CLOSING - A cashbox is in the process of closing. It serves existing buyers, but no new buyers can be added to the end of the queue.  
-* DISABLED - A cashbox has an empty queue and cannot serve any buyer.  
+* `ENABLED` - An enabled cashbox can have a nonempty queue of buyers and serve buyers. New buyers can be added to the end of its queue.  
+* `IS_CLOSING` - A cashbox is in the process of closing. It serves existing buyers, but no new buyers can be added to the end of the queue.  
+* `DISABLED` - A cashbox has an empty queue and cannot serve any buyer.  
 
 
 When the `tact` method of class `Shop` is invoked:  
@@ -34,7 +34,7 @@ Now, please proceed to the `CashBox` class and implement the following methods:
    Serves a buyer if a queue is nonempty and changes state from `IS_CLOSING` to `DISABLE` if necessary  
 
 * `public boolean inState(State state)`  
-   Checks to see if a cashbox is in a specified state.  
+   Checks to see if a cashbox is in a specified state  
 
 * `public boolean notInState(State state)` 
    Checks to see if a cashbox is not in a specified state  
