@@ -23,7 +23,7 @@ public class CashBox {
 		return null;
 	}
 
-	public Buyer serveByer() {
+	public Buyer serveBuyer() {
 		return null;
 	}
 

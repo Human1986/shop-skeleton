@@ -10,6 +10,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.stream.Stream;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -24,6 +25,47 @@ import spoon.reflect.visitor.filter.TypeFilter;
  * @author D. Kolesnikov
  */
 public class ShopTest {
+
+	//////////////////////////////////////////////////////////////////////////////
+
+	private static boolean isAllTestsMustFailed;
+
+	private static Throwable complianceTestFailedCause;
+
+	static {
+		try {
+			String testClassName = new Exception().getStackTrace()[0].getClassName();
+			String className = testClassName.substring(0, testClassName.lastIndexOf("Test"));
+			Class<?> c = Class.forName(className);
+
+			java.lang.reflect.Method[] methods = { 
+					c.getDeclaredMethod("addBuyer", Buyer.class),
+					c.getDeclaredMethod("getCashBox", int.class),
+					c.getDeclaredMethod("setCashBoxState", int.class, CashBox.State.class),
+					c.getDeclaredMethod("tact"),
+					c.getDeclaredMethod("print")
+			};
+
+			org.apache.bcel.classfile.JavaClass jc = org.apache.bcel.Repository.lookupClass(c);
+			for (java.lang.reflect.Method method : methods) {
+				org.apache.bcel.classfile.Method m = jc.getMethod(method);
+				org.apache.bcel.classfile.Code code = m.getCode();
+				Assertions.assertTrue(code.getCode().length > 2, () -> m + " is not a stub");
+			}
+		} catch (Throwable t) {
+			isAllTestsMustFailed = true;
+			complianceTestFailedCause = t;
+			t.printStackTrace();
+		}
+	}
+
+	{
+		if (isAllTestsMustFailed) {
+			Assertions.fail(() -> "Compliance test failed: " + complianceTestFailedCause.getMessage());
+		}
+	}
+
+	//////////////////////////////////////////////////////////////////////////////
 	
 	private static final PrintStream STD_OUT = System.out;
 
