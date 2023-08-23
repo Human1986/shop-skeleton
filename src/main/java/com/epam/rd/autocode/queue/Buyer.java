@@ -26,7 +26,7 @@ public final class Buyer {
 	}
 	
 	@Override
-	public final String toString() {
+	public  String toString() {
 		return String.valueOf(name);
 	}
 	

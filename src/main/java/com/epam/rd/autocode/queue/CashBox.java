@@ -5,53 +5,71 @@ import java.util.LinkedList;
 
 
 public class CashBox {
-	
-	private int number;
-	
-	private Deque<Buyer> byers;
-	
-	private State state;
-	
-	public enum State {
-		ENABLED, DISABLED, IS_CLOSING
-	}
-	
-	public CashBox(int number) {
-	}
 
-	public Deque<Buyer> getQueue() {
-		return null;
-	}
+    private final int number;
 
-	public Buyer serveBuyer() {
-		return null;
-	}
+    private final Deque<Buyer> byers;
 
-	public boolean inState(State state) {
-		return false;
-	}
+    private State state;
 
-	public boolean notInState(State state) {
-		return false;
-	}
-	
-	public void setState(State state) {
-	}
+    public CashBox(int number) {
+        this.number = number;
+        this.byers = new LinkedList<>();
+        this.state = State.DISABLED;
+    }
 
-	public State getState() {
-		return null;
-	}
+    public Deque<Buyer> getQueue() {
+        return byers;
+    }
 
-	public void addLast(Buyer byer) {
-	}
+    public Buyer serveBuyer() {
+        if (! byers.isEmpty()) {
+            Buyer servedBuyer = byers.pollFirst();
+            if (inState(State.IS_CLOSING) && byers.isEmpty()) {
+                setState(State.DISABLED);
+            }
+            return servedBuyer;
+        }
+        return null;
+    }
 
-	public Buyer removeLast() {
-		return null;
-	}
-	
-	@Override
-	public String toString() {
-		return null;
-	}
+    public boolean inState(State state) {
+        return this.state == state;
+    }
 
+    public boolean notInState(State state) {
+        return this.state != state;
+    }
+
+    public State getState() {
+        return state;
+    }
+
+    public void setState(State state) {
+        this.state = state;
+    }
+
+    public void addLast(Buyer buyer) {
+        byers.addLast(buyer);
+    }
+
+    public Buyer removeLast() {
+        return byers.pollLast();
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        State s = getState();
+        sb.append("#").append(number).append("[");
+        sb.append(s == State.ENABLED ? '+' : (s == State.DISABLED ? '-' : '|')).append("]");
+        for (Buyer buyer : byers) {
+            sb.append(buyer.toString());
+        }
+        return sb.toString();
+    }
+
+    public enum State {
+        ENABLED, DISABLED, IS_CLOSING
+    }
 }
