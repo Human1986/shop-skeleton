@@ -1,25 +1,22 @@
 package com.epam.rd.autocode.queue;
 
+import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.LinkedList;
-
 
 public class CashBox {
 
     private final int number;
 
-    private final Deque<Buyer> byers;
+    private final Deque<Buyer> byers = new ArrayDeque<>();
 
-    private State state;
+    private State state = State.DISABLED;
 
     public CashBox(int number) {
         this.number = number;
-        this.byers = new LinkedList<>();
-        this.state = State.DISABLED;
     }
 
     public Deque<Buyer> getQueue() {
-        return byers;
+        return new ArrayDeque<>(byers);
     }
 
     public Buyer serveBuyer() {

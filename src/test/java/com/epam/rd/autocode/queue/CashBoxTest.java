@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 /**
  * @author D. Kolesnikov
  */
-public class CashBoxTest {
+public class CashBoxTest  {
 
 	private static boolean isAllTestsMustFailed;
 

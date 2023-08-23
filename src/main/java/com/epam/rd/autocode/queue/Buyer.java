@@ -3,7 +3,7 @@ package com.epam.rd.autocode.queue;
 /**
  * @author D. Kolesnikov
  */
-public final class Buyer {
+public final class Buyer  {
 	
 	private static char nextName; 
 	
