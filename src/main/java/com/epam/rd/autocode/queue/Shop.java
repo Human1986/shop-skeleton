@@ -38,7 +38,7 @@ public class Shop {
         int enableCashBox = 0;
 
         for (CashBox cashBox : cashBoxes) {
-            if (cashBox.inState(State.ENABLED) || cashBox.inState(State.IS_CLOSING)) {
+            if (cashBox.notInState(State.DISABLED)) {
                 enableCashBox++;
             }
         }
@@ -52,12 +52,13 @@ public class Shop {
     public void addBuyer(Buyer buyer) {
         boolean seen = false;
         CashBox best = null;
-        Comparator<CashBox> comparator = Comparator.comparingInt(new ToIntFunction<CashBox>() {
+        Comparator<CashBox> comparator = Comparator.comparingInt(new ToIntFunction<>() {
             @Override
             public int applyAsInt(CashBox cashBox) {
                 return cashBox.getQueue().size();
             }
         });
+
         for (CashBox box : cashBoxes) {
             if (box.inState(State.ENABLED)) {
                 if (! seen || comparator.compare(box, best) < 0) {
@@ -107,13 +108,6 @@ public class Shop {
                 required_Buyers--;
             }
 
-//            if (cashBox.inState(State.IS_CLOSING)) {
-//                while (required_Buyers >= 0) {
-//                    Buyer defector = defector_Buyers.remove(0);
-//                    cashBox.addLast(defector);
-//                    required_Buyers--;
-//                }
-//            }
             int excess_Buyers = cashBox.getQueue().size() - minMaxSizes[1];
             while (excess_Buyers > 0) {
                 defector_Buyers.add(cashBox.removeLast());
